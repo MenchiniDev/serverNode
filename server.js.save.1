@@ -1,0 +1,60 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const mysql = require('mysql');
+
+const app = express();
+const port = 3000; // Puoi scegliere la porta desiderata
+
+// Configura il middleware per analizzare il corpo delle richieste
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// Configura la connessione al tuo database MySQL
+const db = mysql.createConnection({
+  host: 'localhost', // Sostituisci con i dettagli del tuo database
+  user: 'root',
+  password: 'password',
+  database: 'il_tuo_database',
+});
+
+// Connetti al database
+db.connect((err) => {
+  if (err) {
+    console.error('Errore nella connessione al database:', err);
+  } else {
+    console.log('Connesso al database MySQL');
+  }
+});
+
+// Gestisci la richiesta POST dalla form React
+app.post('/', (req, res) => {
+  const { name, email, message } = req.body;
+
+  // Inserisci i dati nel database
+  const query = 'INSERT INTO tua_tabella (name, email, message) VALUES (?, ?, ?)';
+  db.query(query, [name, email, message], (err, result) => {
+    if (err) {
+      console.error('Errore nell\'inserimento dei dati nel database:', err);
+      res.status(500).json({ message: 'Errore nell\'inserimento dei dati nel database' });
+    } else {
+      console.log('Dati inseriti con successo nel database');
+      res.status(200).json({ message: 'Dati inseriti con successo nel database' });
+    }
+  });
+});
+
+app.listen(port, () => {
+  console.log(`Server in ascolto sulla porta ${port}`);
+});
+Assicurati di configurare correttamente i dettagli della connessione al tuo database MySQL nel codice sopra.
+
+Questo server Node.js ascolterà le richieste POST inviate dalla form React e inserirà i dati nel database. Restituirà una risposta di successo o di errore in base all'esito dell'operazione.
+
+Esegui il server Node.js utilizzando node server.js e assicurati che sia in ascolto sulla porta specificata (nel nostro caso, la porta 3000).
+
+Ora hai un server Node.js che può gestire i dati inviati dalla form React e inserirli nel tuo database. Puoi personalizzare ulteriormente il codice in base alle tue esigenze specifiche, ad esempio gestendo errori in modo più dettagliato o aggiungendo ulteriori funzionalità.
+
+
+
+
+

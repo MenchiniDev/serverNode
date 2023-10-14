@@ -1,0 +1,23 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const mysql = require('mysql');
+
+const app = express();
+const port = 3000; // Puoi scegliere la porta desiderata
+
+// Configura il middleware per analizzare il corpo delle richieste
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// Configura la connessione al tuo database MySQL
+const db = mysql.createConnection({
+  host: 'localhost', // Sostituisci con i dettagli del tuo database
+  user: 'root',
+  password: 'password',
+  database: 'il_tuo_database',
+});
+
+// Connetti al database
+db.connect((err) => {
+  if (err) {
+    console.error('Errore nella connessione
